@@ -1,0 +1,7 @@
+# tensor
+einops
+opt_einsum
+# cpp extension
+ninja
+
+git+https://github.com/STomoya/storch

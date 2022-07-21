@@ -1,0 +1,6 @@
+# set model as resnet18 implemented in torchvision.
+# This file bolongs only for testing training loops.
+name: torchvision_resnet18
+parameters:
+  class_name: torchvision.models.resnet18
+  num_classes: ${config.data.num_classes}

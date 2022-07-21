@@ -1,0 +1,85 @@
+defaults:
+  - _self_
+  - config/data: animeface
+  - config/model: torchvision_resnet18
+  - config/train/optimizer: adam
+
+config:
+
+  train_loop: simple_classification
+
+  run:
+    name: ${config.model.name}
+    ckpt_folder: ./checkpoint
+    log_file: 'log.log'
+    log_interval: 20
+    exec_status: execution_status.txt
+
+  data:
+    data_root: null
+    meta_root: null
+    num_classes: null
+
+    image_size: 224
+
+    transforms:
+      train:
+        - class_name: torchvision.transforms.RandomResizedCrop
+          size:
+            - ${config.data.image_size}
+            - ${config.data.image_size}
+        - class_name: torchvision.transforms.RandomHorizontalFlip
+          p: 0.5
+        - class_name: torchvision.transforms.ToTensor
+        - class_name: torchvision.transforms.Normalize
+          mean: 0.5
+          std: 0.5
+      test:
+        - class_name: torchvision.transforms.Resize
+          size:
+            - ${config.data.image_size}
+            - ${config.data.image_size}
+        - class_name: torchvision.transforms.ToTensor
+        - class_name: torchvision.transforms.Normalize
+          mean: 0.5
+          std: 0.5
+    target_transforms: null
+
+    loader:
+      batch_size: 64
+      shuffle: True
+      drop_last: True
+      num_workers: 8
+      pin_memory: True
+
+  model:
+    name: torchvision_resnet18
+    parameters:
+      class_name: torchvision.models.resnet18
+
+  train:
+    epochs: 100
+
+    optimizer:
+      class_name: torch.optim.Adam
+
+    scheduler:
+      name: chain
+      length: [0.1, 0.9]
+      schedulers:
+        - name: linear
+          args: null
+        - name: cosine
+          args: null
+
+    criterion:
+      class_name: torch.nn.CrossEntropyLoss
+      label_smoothing: 0.0
+
+  env:
+    world_size: 1
+    amp: false
+
+    random_seed: 3407
+    use_deterministic_algorithm: true
+    cudnn_benchmark: false
