@@ -22,4 +22,4 @@
 
 |model|top1|top5|process|confusion matrix|
 |-|-|-|-|-|
-|AlexNet|||![]()|![]()|
+|AlexNet|0.197|0.397|![](./imagenet_sketch/alexnet/status.png)|![](./imagenet_sketch/alexnet/cm.png)|
