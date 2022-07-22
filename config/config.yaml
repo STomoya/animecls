@@ -72,8 +72,10 @@ config:
       schedulers:
         - name: linear
           args: null
-        - name: cosine
-          args: null
+        - name: multistep
+          rel_milestone: [0.7, 0.9]
+          args:
+            gamma: 0.1
 
     criterion:
       class_name: torch.nn.CrossEntropyLoss
