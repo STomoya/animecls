@@ -1,0 +1,5 @@
+name: alexnet
+parameters:
+  class_name: animecls.models.alexnet.AlexNet
+  num_classes: ${config.data.num_classes}
+  dropout: 0.5
