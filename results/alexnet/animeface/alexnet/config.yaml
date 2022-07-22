@@ -1,0 +1,87 @@
+config:
+  train_loop: simple_classification
+  run:
+    name: ${config.model.name}
+    ckpt_folder: ./checkpoint
+    log_file: log.log
+    log_interval: 20
+    exec_status: execution_status.txt
+  data:
+    data_root: ./data/animeface
+    meta_root: ./static/animeface
+    num_classes: 176
+    norm_mean:
+    - 0.5672192
+    - 0.58487934
+    - 0.66615033
+    norm_std:
+    - 0.29889145
+    - 0.3022198
+    - 0.30043015
+    image_size: 224
+    transforms:
+      train:
+      - class_name: torchvision.transforms.RandomResizedCrop
+        size:
+        - ${config.data.image_size}
+        - ${config.data.image_size}
+      - class_name: torchvision.transforms.RandomHorizontalFlip
+        p: 0.5
+      - class_name: torchvision.transforms.ToTensor
+      - class_name: torchvision.transforms.Normalize
+        mean: 0.5
+        std: 0.5
+      test:
+      - class_name: torchvision.transforms.Resize
+        size:
+        - ${config.data.image_size}
+        - ${config.data.image_size}
+      - class_name: torchvision.transforms.ToTensor
+      - class_name: torchvision.transforms.Normalize
+        mean: ${config.data.norm_mean}
+        std: ${config.data.norm_std}
+    target_transforms: null
+    loader:
+      batch_size: 64
+      shuffle: true
+      drop_last: true
+      num_workers: 8
+      pin_memory: true
+  model:
+    name: alexnet
+    parameters:
+      class_name: animecls.models.alexnet.AlexNet
+      num_classes: ${config.data.num_classes}
+      dropout: 0.5
+  train:
+    epochs: 100
+    optimizer:
+      class_name: torch.optim.SGD
+      lr: 0.01
+      momentum: 0.9
+      dampening: 0.0
+      weight_decay: 0.0001
+      nesterov: false
+    scheduler:
+      name: chain
+      length:
+      - 0.1
+      - 0.9
+      schedulers:
+      - name: linear
+        args: null
+      - name: multistep
+        rel_milestone:
+        - 0.7
+        - 0.9
+        args:
+          gamma: 0.1
+    criterion:
+      class_name: torch.nn.CrossEntropyLoss
+      label_smoothing: 0.0
+  env:
+    world_size: 1
+    amp: false
+    random_seed: 3407
+    use_deterministic_algorithm: true
+    cudnn_benchmark: false
