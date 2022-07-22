@@ -40,7 +40,7 @@ def train(config):
     # status
     status = Status(len(train_data)*tcfg.epochs, False, folder.root / cfg.run.log_file, cfg.run.log_interval, cfg.run.name)
     status.initialize_collector(
-        'Loss/CE/train', 'Loss/CE/val', 'Acc@top1/train', 'Acc@top1/val', 'Acc@top5/train', 'Acc@top5/val')
+        'Loss/CE/train', 'Loss/CE/val', 'Acc@top1/train', 'Acc@top1/val', 'Acc@top5/train', 'Acc@top5/val', 'LR')
     status.log_stuff(cfg, model, optimizer, train_data)
 
     best_loss = 1e10
@@ -66,7 +66,8 @@ def train(config):
             status.update(**{
                 'Loss/CE/train': batch_loss.item(),
                 'Acc@top1/train': correct_top1 / target.size(0),
-                'Acc@top5/train': correct_top5 / target.size(0)
+                'Acc@top5/train': correct_top5 / target.size(0),
+                'LR': scheduler.get_last_lr()
             })
 
         model.eval()
