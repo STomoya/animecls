@@ -6,4 +6,14 @@ COMPOSE_COMMAND := "docker compose"
 endif
 
 new:
-	mkdir implementations/${name}
+	touch animecls/models/${name}.py
+	mkdir results/${name}
+	cp results/template.md results/${name}/README.md
+	mkdir results/${name}/imagenet_sketch
+	mkdir results/${name}/animeface
+
+run:
+	${COMPOSE_COMMAND} run --rm torch python -m animecls ${args}
+
+drun:
+	${COMPOSE_COMMAND} run --rm -d torch python -m animecls ${args}
