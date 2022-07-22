@@ -1,0 +1,5 @@
+data_root: ./data/animeface
+meta_root: ./static/animeface
+num_classes: 176
+norm_mean: [0.5672192, 0.58487934, 0.66615033]
+norm_std: [0.29889145, 0.3022198, 0.30043015]

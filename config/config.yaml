@@ -19,6 +19,8 @@ config:
     data_root: null
     meta_root: null
     num_classes: null
+    norm_mean: 0.5
+    norm_std: 0.5
 
     image_size: 224
 
@@ -41,8 +43,8 @@ config:
             - ${config.data.image_size}
         - class_name: torchvision.transforms.ToTensor
         - class_name: torchvision.transforms.Normalize
-          mean: 0.5
-          std: 0.5
+          mean: ${config.data.norm_mean}
+          std: ${config.data.norm_std}
     target_transforms: null
 
     loader:
