@@ -2,7 +2,7 @@ defaults:
   - _self_
   - config/data: animeface
   - config/model: torchvision_resnet18
-  - config/train/optimizer: adam
+  - config/train/optimizer: sgd
 
 config:
 
@@ -63,7 +63,8 @@ config:
     epochs: 100
 
     optimizer:
-      class_name: torch.optim.Adam
+      class_name: torch.optim.SGD
+      lr: 0.1
 
     scheduler:
       name: chain
