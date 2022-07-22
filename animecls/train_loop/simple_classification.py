@@ -40,7 +40,7 @@ def train(config):
     # status
     status = Status(len(train_data)*tcfg.epochs, False, folder.root / cfg.run.log_file, cfg.run.log_interval, cfg.run.name)
     status.initialize_collector(
-        'Loss/CE/train', 'Loss/CE/val', 'Acc@top1/train', 'Acc@top1/val', 'Acc@top5/train', 'Acc@top5/val', 'LR')
+        'Loss/CE/train', 'Loss/CE/val', 'Acc/train@top1', 'Acc/val@top1', 'Acc/train@top5', 'Acc/val@top5', 'LR')
     status.log_stuff(cfg, model, optimizer, train_data)
 
     best_loss = 1e10
@@ -65,8 +65,8 @@ def train(config):
 
             status.update(**{
                 'Loss/CE/train': batch_loss.item(),
-                'Acc@top1/train': correct_top1 / target.size(0),
-                'Acc@top5/train': correct_top5 / target.size(0),
+                'Acc/train@top1': correct_top1 / target.size(0),
+                'Acc/train@top5': correct_top5 / target.size(0),
                 'LR': scheduler.get_last_lr()
             })
 
@@ -93,8 +93,8 @@ def train(config):
 
         status.update_collector(**{
             'Loss/CE/val': loss,
-            'Acc@top1/val': accuracy_top1,
-            'Acc@top5/val': accuracy_top5})
+            'Acc/val@top1': accuracy_top1,
+            'Acc/val@top5': accuracy_top5})
         status.log(f'[VALIDATION] Loss: {loss}, Accuracy: (@top1) {accuracy_top1} (@top5) {accuracy_top5}')
 
         if loss < best_loss:
